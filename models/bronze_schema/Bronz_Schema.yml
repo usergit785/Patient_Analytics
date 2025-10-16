@@ -1,0 +1,390 @@
+version: 2
+
+models:
+  - name: ALLERGIES
+    description: "Raw allergy data from source systems"
+    columns:
+      - name: MESSAGE_ID
+        description: "Unique message identifier"
+      - name: PATIENT
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: CODE
+        description: "Allergy code"
+      - name: DESCRIPTION
+        description: "Allergy description"
+      - name: ALLERGEN
+        description: "Allergen substance"
+      - name: SEVERITY
+        description: "Severity level of allergy"
+      - name: SOURCE_SYSTEM
+        description: "Source system identifier"
+      - name: PROCESSED_AT
+        description: "Timestamp when record was processed"
+
+  - name: CAREPLANS
+    description: "Raw care plan data"
+    columns:
+      - name: ID
+        description: "Care plan identifier"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: START
+        description: "Care plan start date"
+      - name: STOP
+        description: "Care plan end date"
+      - name: CODE
+        description: "Care plan code"
+      - name: DESCRIPTION
+        description: "Care plan description"
+
+  - name: CLAIMS
+    description: "Raw claims data from billing systems"
+    columns:
+      - name: ID
+        description: "Claim identifier"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENTID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: PROVIDERID
+        description: "Provider identifier"
+      - name: PRIMARYPATIENTINSURANCEID
+        description: "Primary insurance identifier"
+      - name: SERVICEDATE
+        description: "Date of service"
+      - name: STATUS1
+        description: "Primary claim status"
+      - name: OUTSTANDING1
+        description: "Outstanding amount for primary"
+
+  - name: CLAIMS_TRANSACTIONS
+    description: "Raw claim transaction details"
+    columns:
+      - name: ID
+        description: "Transaction identifier"
+        tests:
+          - unique
+          - not_null
+      - name: CLAIMID
+        description: "Associated claim ID"
+        tests:
+          - not_null
+      - name: PATIENTID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: TYPE
+        description: "Transaction type"
+      - name: AMOUNT
+        description: "Transaction amount"
+      - name: METHOD
+        description: "Payment method"
+      - name: FROMDATE
+        description: "Service from date"
+      - name: TODATE
+        description: "Service to date"
+
+  - name: DEVICES
+    description: "Raw medical device data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: DEVICE_CODE
+        description: "Device code"
+      - name: DEVICE_DESCRIPTION
+        description: "Device description"
+      - name: DEVICE_START_DATE
+        description: "Device usage start date"
+      - name: DEVICE_END_DATE
+        description: "Device usage end date"
+
+  - name: DIAGNOSIS
+    description: "Raw diagnosis data"
+    columns:
+      - name: DIAGNOSIS_SEQUENCE
+        description: "Sequence number of diagnosis"
+      - name: PATIENT
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: ENCOUNTER
+        description: "Encounter identifier"
+      - name: CODE
+        description: "Diagnosis code"
+      - name: DESCRIPTION
+        description: "Diagnosis description"
+      - name: START_DATE
+        description: "Diagnosis start date"
+      - name: END_DATE
+        description: "Diagnosis end date"
+
+  - name: ENCOUNTERS
+    description: "Raw encounter/visit data"
+    columns:
+      - name: ID
+        description: "Encounter identifier"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: ORGANIZATION
+        description: "Organization identifier"
+      - name: PROVIDER
+        description: "Provider identifier"
+      - name: PAYER
+        description: "Payer identifier"
+      - name: ENCOUNTERCLASS
+        description: "Encounter class (inpatient, outpatient, etc.)"
+      - name: START_DATE
+        description: "Encounter start date"
+      - name: END_DATE
+        description: "Encounter end date"
+      - name: BASE_ENCOUNTER_COST
+        description: "Base cost of encounter"
+      - name: TOTAL_CLAIM_COST
+        description: "Total claim cost"
+
+  - name: IMAGING_STUDIES
+    description: "Raw imaging study data"
+    columns:
+      - name: DATE
+        description: "Imaging study date"
+      - name: PATIENT
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: ENCOUNTER
+        description: "Encounter identifier"
+      - name: MODALITY_CODE
+        description: "Imaging modality code"
+      - name: MODALITY_DESCRIPTION
+        description: "Imaging modality description"
+      - name: PROCEDURE_CODE
+        description: "Procedure code"
+
+  - name: IMMUNIZATIONS
+    description: "Raw immunization data"
+    columns:
+      - name: ADMINISTRATION_DATE
+        description: "Date vaccine was administered"
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: ENCOUNTER
+        description: "Encounter identifier"
+      - name: CODE
+        description: "Vaccine code"
+      - name: DESCRIPTION
+        description: "Vaccine description"
+      - name: BASE_COST
+        description: "Base cost of immunization"
+      - name: SOURCE_SYSTEM
+        description: "Source system identifier"
+
+  - name: MEDICATIONS
+    description: "Raw medication data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: MEDICATION_CODE
+        description: "Medication code"
+      - name: MEDICATION_DESCRIPTION
+        description: "Medication description"
+      - name: MEDICATION_START_DATE
+        description: "Medication start date"
+      - name: MEDICATION_END_DATE
+        description: "Medication end date"
+      - name: SOURCE_SYSTEM
+        description: "Source system identifier"
+
+  - name: OBSERVATIONS
+    description: "Raw clinical observation data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: VALUE_TYPE
+        description: "Type of observation value"
+      - name: OBSERVATION_CODE
+        description: "Observation code"
+      - name: OBSERVATION_VALUE
+        description: "Observation value"
+      - name: UNITS
+        description: "Unit of measurement"
+      - name: OBSERVATION_DATE
+        description: "Date of observation"
+      - name: RESULT_STATUS
+        description: "Status of result"
+
+  - name: ORGANIZATIONS
+    description: "Raw healthcare organization data"
+    columns:
+      - name: ORGANIZATION_ID
+        description: "Organization identifier"
+        tests:
+          - unique
+          - not_null
+      - name: ORGANIZATION_NAME
+        description: "Organization name"
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+      - name: STATE
+        description: "State"
+      - name: ZIP
+        description: "ZIP code"
+      - name: UTILIZATION
+        description: "Utilization metrics"
+
+  - name: PATIENTS
+    description: "Raw patient demographic data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - unique
+          - not_null
+      - name: FIRST_NAME
+        description: "Patient first name"
+      - name: LAST_NAME
+        description: "Patient last name"
+      - name: BIRTHDATE
+        description: "Date of birth"
+      - name: DEATHDATE
+        description: "Date of death"
+      - name: GENDER
+        description: "Patient gender"
+      - name: RACE
+        description: "Patient race"
+      - name: ETHNICITY
+        description: "Patient ethnicity"
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+      - name: STATE
+        description: "State"
+
+  - name: PAYERS
+    description: "Raw insurance payer data"
+    columns:
+      - name: PAYER_ID
+        description: "Payer identifier"
+        tests:
+          - unique
+          - not_null
+      - name: PAYER_NAME
+        description: "Payer name"
+      - name: PAYER_OWNERSHIP
+        description: "Ownership type"
+      - name: PAYER_TYPE
+        description: "Type of payer"
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+
+  - name: PAYER_TRANSITIONS
+    description: "Raw patient insurance coverage transitions"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: PAYER_ID
+        description: "Primary payer identifier"
+      - name: COVERAGE_START_DATE
+        description: "Coverage start date"
+      - name: COVERAGE_END_DATE
+        description: "Coverage end date"
+      - name: PLAN_OWNERSHIP
+        description: "Plan ownership type"
+
+  - name: PROCEDURES
+    description: "Raw medical procedure data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: PROCEDURE_CODE
+        description: "Procedure code"
+      - name: PROCEDURE_DESCRIPTION
+        description: "Procedure description"
+      - name: PROCEDURE_START_DATETIME
+        description: "Procedure start datetime"
+      - name: PROCEDURE_END_DATETIME
+        description: "Procedure end datetime"
+      - name: BASE_COST
+        description: "Base cost of procedure"
+      - name: SOURCE_SYSTEM
+        description: "Source system identifier"
+
+  - name: PROVIDERS
+    description: "Raw healthcare provider data"
+    columns:
+      - name: PROVIDER_ID
+        description: "Provider identifier"
+        tests:
+          - unique
+          - not_null
+      - name: ORGANIZATION_ID
+        description: "Associated organization identifier"
+      - name: PROVIDER_NAME
+        description: "Provider name"
+      - name: GENDER
+        description: "Provider gender"
+      - name: SPECIALTY
+        description: "Provider specialty"
+      - name: ADDRESS
+        description: "Street address"
+      - name: ENCOUNTER_COUNT
+        description: "Total encounter count"
+      - name: PROCEDURE_COUNT
+        description: "Total procedure count"
+
+  - name: SUPPLIES
+    description: "Raw medical supplies data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: SUPPLY_CODE
+        description: "Supply code"
+      - name: SUPPLY_DESCRIPTION
+        description: "Supply description"
+      - name: SUPPLY_DATE
+        description: "Date supply was used"
+      - name: SUPPLY_QUANTITY
+        description: "Quantity of supply"
+      - name: SOURCE_FOLDER
+        description: "Source folder path"

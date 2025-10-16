@@ -1,0 +1,707 @@
+version: 2
+
+models:
+  # FACT TABLES
+  - name: CLAIMS_FACT
+    description: "Fact table for claims transactions with financial metrics"
+    columns:
+      - name: CLAIM_TRANSACTION_KEY
+        description: "Surrogate key for claim transaction"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT_KEY
+        description: "Foreign key to patient dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PATIENT_DIM')
+              field: PATIENT_KEY
+      - name: PROVIDER_KEY
+        description: "Foreign key to provider dimension"
+        tests:
+          - relationships:
+              to: ref('PROVIDER_DIM')
+              field: PROVIDER_KEY
+      - name: FROM_DATE_KEY
+        description: "Foreign key to date dimension (from date)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: TO_DATE_KEY
+        description: "Foreign key to date dimension (to date)"
+        tests:
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: CLAIM_ID
+        description: "Business key for claim"
+      - name: CHARGE_ID
+        description: "Business key for charge"
+      - name: PATIENT_ID
+        description: "Business key for patient"
+      - name: TRANSACTION_TYPE
+        description: "Type of transaction"
+        tests:
+          - not_null
+      - name: PAYMENT_METHOD
+        description: "Payment method used"
+      - name: AMOUNT
+        description: "Transaction amount"
+        tests:
+          - not_null
+      - name: UNITS
+        description: "Number of units"
+      - name: UNIT_AMOUNT
+        description: "Amount per unit"
+      - name: PAYMENTS
+        description: "Total payments received"
+      - name: TRANSFERS
+        description: "Total transfers"
+      - name: OUTSTANDING
+        description: "Outstanding balance"
+      - name: NET_OUTSTANDING
+        description: "Net outstanding amount"
+      - name: FROM_DATE
+        description: "Service from date"
+      - name: TO_DATE
+        description: "Service to date"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: ENCOUNTER_FACT
+    description: "Fact table for patient encounters with cost and utilization metrics"
+    columns:
+      - name: ENCOUNTER_KEY
+        description: "Surrogate key for encounter"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT_KEY
+        description: "Foreign key to patient dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PATIENT_DIM')
+              field: PATIENT_KEY
+      - name: PROVIDER_KEY
+        description: "Foreign key to provider dimension"
+        tests:
+          - relationships:
+              to: ref('PROVIDER_DIM')
+              field: PROVIDER_KEY
+      - name: ORGANIZATION_KEY
+        description: "Foreign key to organization dimension"
+        tests:
+          - relationships:
+              to: ref('ORGANIZATION_DIM')
+              field: ORGANIZATION_KEY
+      - name: PAYER_KEY
+        description: "Foreign key to payer dimension"
+        tests:
+          - relationships:
+              to: ref('PAYER_DIM')
+              field: PAYER_KEY
+      - name: START_DATE_KEY
+        description: "Foreign key to date dimension (start date)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: END_DATE_KEY
+        description: "Foreign key to date dimension (end date)"
+        tests:
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: PATIENT_ID
+        description: "Business key for patient"
+      - name: ENCOUNTER_CODE
+        description: "Encounter code"
+      - name: ENCOUNTER_CLASS
+        description: "Encounter classification"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['inpatient', 'outpatient', 'ambulatory', 'emergency', 'urgentcare', 'wellness']
+      - name: ENCOUNTER_DESCRIPTION
+        description: "Encounter description"
+      - name: REASON_CODE
+        description: "Reason code for encounter"
+      - name: REASON_DESCRIPTION
+        description: "Reason description"
+      - name: BASE_ENCOUNTER_COST
+        description: "Base cost of encounter"
+      - name: TOTAL_CLAIM_COST
+        description: "Total claim cost"
+      - name: PAYER_COVERAGE
+        description: "Amount covered by payer"
+      - name: PATIENT_RESPONSIBILITY
+        description: "Patient responsibility amount"
+      - name: START_DATE
+        description: "Encounter start date"
+      - name: END_DATE
+        description: "Encounter end date"
+      - name: LENGTH_OF_STAY_DAYS
+        description: "Length of stay in days"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: IMMUNIZATION_FACT
+    description: "Fact table for immunizations/vaccinations"
+    columns:
+      - name: IMMUNIZATION_KEY
+        description: "Surrogate key for immunization"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT_KEY
+        description: "Foreign key to patient dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PATIENT_DIM')
+              field: PATIENT_KEY
+      - name: ADMINISTRATION_DATE_KEY
+        description: "Foreign key to date dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: PATIENT_ID
+        description: "Business key for patient"
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: VACCINE_CODE
+        description: "Vaccine code"
+        tests:
+          - not_null
+      - name: VACCINE_DESCRIPTION
+        description: "Vaccine description"
+      - name: VACCINE_DISPLAY
+        description: "Vaccine display name"
+      - name: IMMUNIZATION_COST
+        description: "Cost of immunization"
+      - name: ADMINISTRATION_DATE
+        description: "Date vaccine was administered"
+      - name: VACCINE_CATEGORY
+        description: "Category of vaccine"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: MEDICATION_FACT
+    description: "Fact table for medication prescriptions and administration"
+    columns:
+      - name: MEDICATION_KEY
+        description: "Surrogate key for medication fact"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT_KEY
+        description: "Foreign key to patient dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PATIENT_DIM')
+              field: PATIENT_KEY
+      - name: MEDICATION_DIM_KEY
+        description: "Foreign key to medication dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('MEDICATION_DIM')
+              field: MEDICATION_KEY
+      - name: MEDICATION_START_DATE_KEY
+        description: "Foreign key to date dimension (start date)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: MEDICATION_END_DATE_KEY
+        description: "Foreign key to date dimension (end date)"
+        tests:
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: PATIENT_ID
+        description: "Business key for patient"
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: MEDICATION_CODE
+        description: "Medication code"
+      - name: MEDICATION_DESCRIPTION
+        description: "Medication description"
+      - name: MEDICATION_START_DATE
+        description: "Medication start date"
+      - name: MEDICATION_END_DATE
+        description: "Medication end date"
+      - name: MEDICATION_DURATION_DAYS
+        description: "Duration of medication in days"
+      - name: IS_ACTIVE_MEDICATION
+        description: "Flag indicating if medication is currently active"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: OBSERVATION_FACT
+    description: "Fact table for clinical observations and lab results"
+    columns:
+      - name: OBSERVATION_KEY
+        description: "Surrogate key for observation"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT_KEY
+        description: "Foreign key to patient dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PATIENT_DIM')
+              field: PATIENT_KEY
+      - name: OBSERVATION_DATE_KEY
+        description: "Foreign key to date dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: PATIENT_ID
+        description: "Business key for patient"
+      - name: OBSERVATION_CODE
+        description: "Observation code"
+        tests:
+          - not_null
+      - name: VALUE_TYPE
+        description: "Type of observation value"
+        tests:
+          - accepted_values:
+              values: ['numeric', 'text', 'coded']
+      - name: UNITS
+        description: "Unit of measurement"
+      - name: RESULT_STATUS
+        description: "Status of result"
+      - name: ABNORMAL_FLAG
+        description: "Abnormal flag indicator"
+      - name: ABNORMALITY_STATUS
+        description: "Abnormality status description"
+      - name: OBSERVATION_VALUE_NUMERIC
+        description: "Numeric observation value"
+      - name: OBSERVATION_VALUE_TEXT
+        description: "Text observation value"
+      - name: REF_RANGE_LOW
+        description: "Reference range lower bound"
+      - name: REF_RANGE_HIGH
+        description: "Reference range upper bound"
+      - name: IS_ABNORMAL
+        description: "Flag indicating if result is abnormal"
+      - name: OBSERVATION_DATE
+        description: "Date of observation"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: PROCEDURE_FACT
+    description: "Fact table for medical procedures"
+    columns:
+      - name: PROCEDURE_KEY
+        description: "Surrogate key for procedure fact"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT_KEY
+        description: "Foreign key to patient dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PATIENT_DIM')
+              field: PATIENT_KEY
+      - name: PROCEDURE_DIM_KEY
+        description: "Foreign key to procedure dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PROCEDURE_DIM')
+              field: PROCEDURE_KEY
+      - name: PROCEDURE_START_DATE_KEY
+        description: "Foreign key to date dimension (start date)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: PROCEDURE_END_DATE_KEY
+        description: "Foreign key to date dimension (end date)"
+        tests:
+          - relationships:
+              to: ref('DATE_DIM')
+              field: DATE_KEY
+      - name: PATIENT_ID
+        description: "Business key for patient"
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: PROCEDURE_CODE
+        description: "Procedure code"
+      - name: PROCEDURE_DESCRIPTION
+        description: "Procedure description"
+      - name: REASON_CODE
+        description: "Reason code for procedure"
+      - name: REASON_DESCRIPTION
+        description: "Reason description"
+      - name: PROCEDURE_COST
+        description: "Cost of procedure"
+      - name: PROCEDURE_START_DATE
+        description: "Procedure start date"
+      - name: PROCEDURE_END_DATE
+        description: "Procedure end date"
+      - name: PROCEDURE_DURATION_MINUTES
+        description: "Duration of procedure in minutes"
+      - name: PROCEDURE_DURATION_HOURS
+        description: "Duration of procedure in hours"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  # DIMENSION TABLES
+  - name: DATE_DIM
+    description: "Date dimension table with calendar attributes"
+    columns:
+      - name: DATE_KEY
+        description: "Surrogate key for date (format: YYYYMMDD)"
+        tests:
+          - unique
+          - not_null
+      - name: DATE_VALUE
+        description: "Actual date value"
+        tests:
+          - unique
+          - not_null
+      - name: YEAR
+        description: "Year (YYYY)"
+        tests:
+          - not_null
+      - name: QUARTER
+        description: "Quarter (1-4)"
+        tests:
+          - not_null
+      - name: MONTH
+        description: "Month number (1-12)"
+        tests:
+          - not_null
+      - name: MONTH_NAME
+        description: "Month name (January-December)"
+      - name: WEEK_OF_YEAR
+        description: "Week of year (1-53)"
+      - name: DAY_OF_MONTH
+        description: "Day of month (1-31)"
+        tests:
+          - not_null
+      - name: DAY_OF_WEEK
+        description: "Day of week (1-7)"
+      - name: DAY_NAME
+        description: "Day name (Monday-Sunday)"
+      - name: DAY_OF_YEAR
+        description: "Day of year (1-366)"
+      - name: IS_WEEKEND
+        description: "Flag indicating weekend"
+      - name: IS_WEEKDAY
+        description: "Flag indicating weekday"
+      - name: YEAR_QUARTER
+        description: "Year-Quarter combination"
+      - name: YEAR_MONTH
+        description: "Year-Month combination"
+      - name: LAST_DAY_OF_MONTH
+        description: "Last day of the month"
+      - name: IS_MONTH_END
+        description: "Flag indicating month end"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: DIAGNOSIS_DIM
+    description: "Diagnosis dimension with medical codes and descriptions"
+    columns:
+      - name: DIAGNOSIS_KEY
+        description: "Surrogate key for diagnosis"
+        tests:
+          - unique
+          - not_null
+      - name: DIAGNOSIS_CODE
+        description: "Diagnosis code"
+        tests:
+          - unique
+          - not_null
+      - name: DIAGNOSIS_DESCRIPTION
+        description: "Diagnosis description"
+      - name: CODING_METHOD
+        description: "Coding method (ICD-9, ICD-10)"
+        tests:
+          - accepted_values:
+              values: ['ICD-9', 'ICD-10', 'SNOMED-CT']
+      - name: DIAGNOSIS_CATEGORY
+        description: "Category of diagnosis"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: MEDICATION_DIM
+    description: "Medication dimension with drug codes and descriptions"
+    columns:
+      - name: MEDICATION_KEY
+        description: "Surrogate key for medication"
+        tests:
+          - unique
+          - not_null
+      - name: MEDICATION_CODE
+        description: "Medication code"
+        tests:
+          - unique
+          - not_null
+      - name: MEDICATION_DESCRIPTION
+        description: "Medication description"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: ORGANIZATION_DIM
+    description: "Healthcare organization dimension with SCD Type 2"
+    columns:
+      - name: ORGANIZATION_KEY
+        description: "Surrogate key for organization"
+        tests:
+          - unique
+          - not_null
+      - name: ORGANIZATION_ID
+        description: "Business key for organization"
+        tests:
+          - not_null
+      - name: ORGANIZATION_NAME
+        description: "Organization name"
+        tests:
+          - not_null
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+      - name: ZIP
+        description: "ZIP code"
+      - name: LATITUDE
+        description: "Latitude coordinate"
+      - name: LONGITUDE
+        description: "Longitude coordinate"
+      - name: CONTACT_NUMBER
+        description: "Contact phone number"
+      - name: UTILIZATION
+        description: "Utilization metrics"
+      - name: FACILITY_SIZE
+        description: "Size category of facility"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+      - name: DW_UPDATED_AT
+        description: "Data warehouse update timestamp"
+
+  - name: PATIENT_DIM
+    description: "Patient dimension with demographics and SCD Type 2"
+    columns:
+      - name: PATIENT_KEY
+        description: "Surrogate key for patient"
+        tests:
+          - unique
+          - not_null
+      - name: PATIENT_ID
+        description: "Business key for patient"
+        tests:
+          - not_null
+      - name: FIRST_NAME
+        description: "Patient first name"
+      - name: LAST_NAME
+        description: "Patient last name"
+      - name: FULL_NAME
+        description: "Patient full name"
+      - name: BIRTHDATE
+        description: "Date of birth"
+        tests:
+          - not_null
+      - name: DEATHDATE
+        description: "Date of death"
+      - name: IS_DECEASED
+        description: "Flag indicating if patient is deceased"
+      - name: AGE
+        description: "Current age or age at death"
+      - name: AGE_GROUP
+        description: "Age group category"
+      - name: ACCOUNT_NUMBER
+        description: "Patient account number"
+      - name: GENDER
+        description: "Patient gender"
+        tests:
+          - accepted_values:
+              values: ['M', 'F', 'O', 'U']
+      - name: RACE
+        description: "Patient race"
+      - name: LANGUAGE
+        description: "Preferred language"
+      - name: MARITAL_STATUS
+        description: "Marital status"
+      - name: ETHNICITY
+        description: "Patient ethnicity"
+      - name: BIRTHPLACE
+        description: "Place of birth"
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+      - name: STATE
+        description: "State"
+      - name: COUNTY
+        description: "County"
+      - name: FIPS
+        description: "FIPS code"
+      - name: LATITUDE
+        description: "Latitude coordinate"
+      - name: LONGITUDE
+        description: "Longitude coordinate"
+      - name: HEALTHCARE_EXPENSES
+        description: "Total healthcare expenses"
+      - name: HEALTHCARE_COVERAGE
+        description: "Healthcare coverage amount"
+      - name: INCOME
+        description: "Annual income"
+      - name: INCOME_BRACKET
+        description: "Income bracket category"
+      - name: EFFECTIVE_START_DATE
+        description: "SCD Type 2 effective start date"
+        tests:
+          - not_null
+      - name: EFFECTIVE_END_DATE
+        description: "SCD Type 2 effective end date"
+      - name: IS_CURRENT
+        description: "Flag indicating current record"
+        tests:
+          - not_null
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+      - name: DW_UPDATED_AT
+        description: "Data warehouse update timestamp"
+
+  - name: PAYER_DIM
+    description: "Insurance payer dimension with SCD Type 2"
+    columns:
+      - name: PAYER_KEY
+        description: "Surrogate key for payer"
+        tests:
+          - unique
+          - not_null
+      - name: PAYER_ID
+        description: "Business key for payer"
+        tests:
+          - not_null
+      - name: PAYER_NAME
+        description: "Payer name"
+        tests:
+          - not_null
+      - name: PAYER_OWNERSHIP
+        description: "Ownership type"
+      - name: PAYER_TYPE
+        description: "Type of payer"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+      - name: DW_UPDATED_AT
+        description: "Data warehouse update timestamp"
+
+  - name: PROCEDURE_DIM
+    description: "Medical procedure dimension with codes and descriptions"
+    columns:
+      - name: PROCEDURE_KEY
+        description: "Surrogate key for procedure"
+        tests:
+          - unique
+          - not_null
+      - name: PROCEDURE_CODE
+        description: "Procedure code"
+        tests:
+          - unique
+          - not_null
+      - name: PROCEDURE_DESCRIPTION
+        description: "Procedure description"
+      - name: REASON_CODE
+        description: "Reason code for procedure"
+      - name: REASON_DESCRIPTION
+        description: "Reason description"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+
+  - name: PROVIDER_DIM
+    description: "Healthcare provider dimension with performance metrics and SCD Type 2"
+    columns:
+      - name: PROVIDER_KEY
+        description: "Surrogate key for provider"
+        tests:
+          - unique
+          - not_null
+      - name: PROVIDER_ID
+        description: "Business key for provider"
+        tests:
+          - not_null
+      - name: ORGANIZATION_ID
+        description: "Associated organization identifier"
+      - name: PROVIDER_NAME
+        description: "Provider name"
+        tests:
+          - not_null
+      - name: GENDER
+        description: "Provider gender"
+      - name: SPECIALTY
+        description: "Provider specialty"
+      - name: SPECIALTY_NORMALIZED
+        description: "Normalized specialty code"
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+      - name: STATE
+        description: "State"
+      - name: ZIP
+        description: "ZIP code"
+      - name: LATITUDE
+        description: "Latitude coordinate"
+      - name: LONGITUDE
+        description: "Longitude coordinate"
+      - name: ENCOUNTER_COUNT
+        description: "Total encounter count"
+      - name: PROCEDURE_COUNT
+        description: "Total procedure count"
+      - name: PROVIDER_VOLUME_CATEGORY
+        description: "Volume category (Low, Medium, High)"
+      - name: AVG_PROCEDURES_PER_ENCOUNTER
+        description: "Average procedures per encounter"
+      - name: DW_CREATED_AT
+        description: "Data warehouse creation timestamp"
+        tests:
+          - not_null
+      - name: DW_UPDATED_AT
+        description: "Data warehouse update timestamp"

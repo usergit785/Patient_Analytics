@@ -1,0 +1,1 @@
+select * from {{ source('patient_analytics_csv','careplans') }}

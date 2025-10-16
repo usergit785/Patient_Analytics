@@ -1,0 +1,573 @@
+version: 2
+
+models:
+  - name: CLEANED_ALLERGIES
+    description: "Cleaned and standardized allergy data"
+    columns:
+      - name: PATIENT
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ENCOUNTER
+        description: "Encounter identifier"
+      - name: CODE
+        description: "Standardized allergy code"
+        tests:
+          - not_null
+      - name: DESCRIPTION
+        description: "Allergy description"
+      - name: CATEGORY
+        description: "Allergy category"
+      - name: ALLERGEN
+        description: "Allergen substance"
+      - name: SEVERITY
+        description: "Severity level (mild, moderate, severe)"
+      - name: REACTION_CODE
+        description: "Reaction code"
+
+  - name: CLEANED_CAREPLANS
+    description: "Cleaned care plan data"
+    columns:
+      - name: ID
+        description: "Care plan unique identifier"
+        tests:
+          - unique
+          - not_null
+      - name: START_DATE
+        description: "Care plan start date"
+        tests:
+          - not_null
+      - name: PATIENT
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ENCOUNTER
+        description: "Encounter identifier"
+      - name: CODE
+        description: "Care plan code"
+      - name: DESCRIPTION
+        description: "Care plan description"
+      - name: REASONCODE
+        description: "Reason code for care plan"
+      - name: REASONDESCRIPTION
+        description: "Reason description"
+
+  - name: CLEANED_CLAIMS
+    description: "Cleaned claims data with standardized billing information"
+    columns:
+      - name: PATIENTID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: PROVIDERID
+        description: "Provider identifier"
+        tests:
+          - relationships:
+              to: ref('CLEANSED_PROVIDERS')
+              field: PROVIDER_ID
+      - name: PRIMARYPATIENTINSURANCEID
+        description: "Primary insurance identifier"
+      - name: SECONDARYPATIENTINSURANCEID
+        description: "Secondary insurance identifier"
+      - name: SERVICEDATE
+        description: "Date of service"
+        tests:
+          - not_null
+      - name: STATUS1
+        description: "Primary claim status"
+      - name: OUTSTANDING1
+        description: "Outstanding primary amount"
+      - name: DIAGNOSIS1
+        description: "Primary diagnosis code"
+
+  - name: CLEANED_CLAIMS_TRANSACTIONS
+    description: "Cleaned claim transaction details"
+    columns:
+      - name: CLAIMID
+        description: "Associated claim ID"
+        tests:
+          - not_null
+      - name: CHARGEID
+        description: "Charge identifier"
+      - name: PATIENTID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: TYPE
+        description: "Transaction type (charge, payment, adjustment)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['charge', 'payment', 'adjustment', 'transfer']
+      - name: AMOUNT
+        description: "Transaction amount"
+        tests:
+          - not_null
+      - name: METHOD
+        description: "Payment method"
+      - name: FROMDATE
+        description: "Service from date"
+        tests:
+          - not_null
+      - name: TODATE
+        description: "Service to date"
+      - name: PROCEDURECODE
+        description: "Procedure code"
+      - name: UNITS
+        description: "Number of units"
+      - name: UNITAMOUNT
+        description: "Amount per unit"
+      - name: PAYMENTS
+        description: "Total payments"
+      - name: OUTSTANDING
+        description: "Outstanding balance"
+
+  - name: CLEANED_DIAGNOSIS
+    description: "Cleaned diagnosis data"
+    columns:
+      - name: DIAGNOSIS_SEQUENCE
+        description: "Sequence number of diagnosis"
+      - name: DIAGNOSIS_CODING_METHOD
+        description: "Coding method (ICD-9, ICD-10)"
+        tests:
+          - accepted_values:
+              values: ['ICD-9', 'ICD-10', 'SNOMED-CT']
+      - name: START_DATE
+        description: "Diagnosis start date"
+      - name: END_DATE
+        description: "Diagnosis end date"
+      - name: PATIENT
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: CODE
+        description: "Diagnosis code"
+        tests:
+          - not_null
+      - name: DESCRIPTION
+        description: "Diagnosis description"
+
+  - name: CLEANED_ENCOUNTERS
+    description: "Cleaned encounter/visit data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ORGANIZATION
+        description: "Organization identifier"
+        tests:
+          - relationships:
+              to: ref('CLEANSED_ORGANIZATIONS')
+              field: ORGANIZATION_ID
+      - name: PROVIDER
+        description: "Provider identifier"
+        tests:
+          - relationships:
+              to: ref('CLEANSED_PROVIDERS')
+              field: PROVIDER_ID
+      - name: PAYER
+        description: "Payer identifier"
+        tests:
+          - relationships:
+              to: ref('CLEANSED_PAYERS')
+              field: PAYER_ID
+      - name: ENCOUNTERCLASS
+        description: "Encounter class"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['inpatient', 'outpatient', 'ambulatory', 'emergency', 'urgentcare', 'wellness']
+      - name: START_DATE
+        description: "Encounter start date"
+        tests:
+          - not_null
+      - name: END_DATE
+        description: "Encounter end date"
+      - name: ENCOUNTER_CODE
+        description: "Encounter code"
+      - name: BASE_ENCOUNTER_COST
+        description: "Base cost of encounter"
+      - name: TOTAL_CLAIM_COST
+        description: "Total claim cost"
+      - name: PAYER_COVERAGE
+        description: "Amount covered by payer"
+
+  - name: CLEANED_IMAGING_STUDIES
+    description: "Cleaned imaging study data"
+    columns:
+      - name: DATE
+        description: "Imaging study date"
+        tests:
+          - not_null
+      - name: PATIENT
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ENCOUNTER
+        description: "Encounter identifier"
+      - name: BODYSITE_CODE
+        description: "Body site code"
+      - name: BODYSITE_DESCRIPTION
+        description: "Body site description"
+      - name: MODALITY_CODE
+        description: "Imaging modality code"
+      - name: MODALITY_DESCRIPTION
+        description: "Imaging modality description"
+      - name: PROCEDURE_CODE
+        description: "Procedure code"
+
+  - name: CLEANED_IMMUNIZATIONS
+    description: "Cleaned immunization data"
+    columns:
+      - name: ADMINISTRATION_DATE
+        description: "Date vaccine was administered"
+        tests:
+          - not_null
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ENCOUNTER
+        description: "Encounter identifier"
+      - name: CODE
+        description: "Vaccine code"
+        tests:
+          - not_null
+      - name: DESCRIPTION
+        description: "Vaccine description"
+      - name: VACCINE_DISPLAY
+        description: "Vaccine display name"
+      - name: BASE_COST
+        description: "Base cost of immunization"
+
+  - name: CLEANED_PATIENTS
+    description: "Cleaned patient demographic data with standardized formatting"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient unique identifier"
+        tests:
+          - unique
+          - not_null
+      - name: FIRST_NAME
+        description: "Patient first name"
+        tests:
+          - not_null
+      - name: LAST_NAME
+        description: "Patient last name"
+        tests:
+          - not_null
+      - name: BIRTHDATE
+        description: "Date of birth"
+        tests:
+          - not_null
+      - name: DEATHDATE
+        description: "Date of death (null if alive)"
+      - name: ACCOUNT_NUMBER
+        description: "Patient account number"
+      - name: GENDER
+        description: "Patient gender"
+        tests:
+          - accepted_values:
+              values: ['M', 'F', 'O', 'U']
+      - name: RACE
+        description: "Patient race"
+      - name: LANGUAGE
+        description: "Preferred language"
+      - name: MARITAL_STATUS
+        description: "Marital status"
+      - name: ETHNICITY
+        description: "Patient ethnicity"
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+      - name: STATE
+        description: "State"
+      - name: HEALTHCARE_EXPENSES
+        description: "Total healthcare expenses"
+      - name: HEALTHCARE_COVERAGE
+        description: "Healthcare coverage amount"
+      - name: INCOME
+        description: "Annual income"
+
+  - name: CLEANSED_DEVICES
+    description: "Cleansed medical device data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: DEVICE_CODE
+        description: "Device code"
+        tests:
+          - not_null
+      - name: DEVICE_DESCRIPTION
+        description: "Device description"
+      - name: DEVICE_GTIN
+        description: "Global Trade Item Number"
+      - name: MANUFACTURING_DATE
+        description: "Device manufacturing date"
+      - name: EXPIRY_DATE
+        description: "Device expiry date"
+      - name: BATCH_NUMBER
+        description: "Batch number"
+      - name: SERIAL_NUMBER
+        description: "Serial number"
+
+  - name: CLEANSED_MEDICATIONS
+    description: "Cleansed medication data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: MEDICATION_CODE
+        description: "Medication code"
+        tests:
+          - not_null
+      - name: MEDICATION_DESCRIPTION
+        description: "Medication description"
+      - name: MEDICATION_START_DATE
+        description: "Medication start date"
+        tests:
+          - not_null
+      - name: MEDICATION_END_DATE
+        description: "Medication end date"
+
+  - name: CLEANSED_OBSERVATIONS
+    description: "Cleansed clinical observation data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: VALUE_TYPE
+        description: "Type of observation value"
+        tests:
+          - accepted_values:
+              values: ['numeric', 'text', 'coded']
+      - name: OBSERVATION_CODE
+        description: "Observation code"
+        tests:
+          - not_null
+      - name: OBSERVATION_VALUE
+        description: "Observation value"
+      - name: UNITS
+        description: "Unit of measurement"
+      - name: REF_RANGE_LOW
+        description: "Reference range lower bound"
+      - name: REF_RANGE_HIGH
+        description: "Reference range upper bound"
+      - name: ABNORMAL_FLAG
+        description: "Abnormal flag indicator"
+      - name: RESULT_STATUS
+        description: "Result status"
+      - name: OBSERVATION_DATE
+        description: "Date of observation"
+        tests:
+          - not_null
+      - name: ABNORMALITY_STATUS
+        description: "Abnormality status description"
+
+  - name: CLEANSED_ORGANIZATIONS
+    description: "Cleansed healthcare organization data"
+    columns:
+      - name: ORGANIZATION_ID
+        description: "Organization unique identifier"
+        tests:
+          - unique
+          - not_null
+      - name: ORGANIZATION_NAME
+        description: "Organization name"
+        tests:
+          - not_null
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+      - name: ZIP
+        description: "ZIP code"
+      - name: LATITUDE
+        description: "Latitude coordinate"
+      - name: LONGITUDE
+        description: "Longitude coordinate"
+      - name: CONTACT_NUMBER
+        description: "Contact phone number"
+      - name: UTILIZATION
+        description: "Utilization metrics"
+
+  - name: CLEANSED_PAYERS
+    description: "Cleansed insurance payer data"
+    columns:
+      - name: PAYER_ID
+        description: "Payer unique identifier"
+        tests:
+          - unique
+          - not_null
+      - name: PAYER_NAME
+        description: "Payer name"
+        tests:
+          - not_null
+      - name: PAYER_OWNERSHIP
+        description: "Ownership type"
+
+  - name: CLEANSED_PAYER_TRANSITIONS
+    description: "Cleansed patient insurance coverage transitions"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: MEMBER_ID
+        description: "Member identifier"
+      - name: PAYER_ID
+        description: "Primary payer identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANSED_PAYERS')
+              field: PAYER_ID
+      - name: SECONDARY_PAYER_ID
+        description: "Secondary payer identifier"
+      - name: PLAN_OWNERSHIP
+        description: "Plan ownership type"
+      - name: OWNER_NAME
+        description: "Owner name"
+      - name: COVERAGE_START_DATE
+        description: "Coverage start date"
+        tests:
+          - not_null
+      - name: COVERAGE_END_DATE
+        description: "Coverage end date"
+
+  - name: CLEANSED_PROCEDURES
+    description: "Cleansed medical procedure data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: PROCEDURE_CODE
+        description: "Procedure code"
+        tests:
+          - not_null
+      - name: PROCEDURE_DESCRIPTION
+        description: "Procedure description"
+      - name: PROCEDURE_START_DATE
+        description: "Procedure start date"
+        tests:
+          - not_null
+      - name: PROCEDURE_END_DATE
+        description: "Procedure end date"
+      - name: BASE_COST
+        description: "Base cost of procedure"
+      - name: REASON_CODE
+        description: "Reason code for procedure"
+      - name: REASON_DESCRIPTION
+        description: "Reason description"
+
+  - name: CLEANSED_PROVIDERS
+    description: "Cleansed healthcare provider data"
+    columns:
+      - name: PROVIDER_ID
+        description: "Provider unique identifier"
+        tests:
+          - unique
+          - not_null
+      - name: ORGANIZATION_ID
+        description: "Associated organization identifier"
+        tests:
+          - relationships:
+              to: ref('CLEANSED_ORGANIZATIONS')
+              field: ORGANIZATION_ID
+      - name: PROVIDER_NAME
+        description: "Provider name"
+        tests:
+          - not_null
+      - name: GENDER
+        description: "Provider gender"
+      - name: SPECIALTY
+        description: "Provider specialty"
+      - name: ADDRESS
+        description: "Street address"
+      - name: CITY
+        description: "City"
+      - name: STATE
+        description: "State"
+      - name: ZIP
+        description: "ZIP code"
+      - name: ENCOUNTER_COUNT
+        description: "Total encounter count"
+      - name: PROCEDURE_COUNT
+        description: "Total procedure count"
+
+  - name: CLEANSED_SUPPLIES
+    description: "Cleansed medical supplies data"
+    columns:
+      - name: PATIENT_ID
+        description: "Patient identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('CLEANED_PATIENTS')
+              field: PATIENT_ID
+      - name: ENCOUNTER_ID
+        description: "Encounter identifier"
+      - name: SUPPLY_CODE
+        description: "Supply code"
+        tests:
+          - not_null
+      - name: SUPPLY_DESCRIPTION
+        description: "Supply description"
+      - name: SUPPLY_DATE
+        description: "Date supply was used"
+        tests:
+          - not_null
+      - name: SUPPLY_QUANTITY
+        description: "Quantity of supply"

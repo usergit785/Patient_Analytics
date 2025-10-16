@@ -1,0 +1,1263 @@
+version: 2
+
+sources:
+  - name: hl7
+    description: "HL7 schema containing healthcare data in HL7 message format"
+    database: raw_db
+    schema: hl7
+    tables:
+      - name: allergies
+        description: "Patient allergy information from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: allergy_type
+            description: "Type of allergy"
+          - name: allergen
+            description: "Allergen causing the reaction"
+          - name: severity
+            description: "Severity level of the allergy"
+          - name: reaction_code
+            description: "Code representing the allergic reaction"
+          - name: identification_date
+            description: "Date when allergy was identified"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+      - name: diagnoses
+        description: "Patient diagnosis information from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: diagnosis_sequence
+            description: "Sequence number of diagnosis"
+          - name: diagnosis_coding_method
+            description: "Coding method used (ICD-10, etc.)"
+          - name: diagnosis_code
+            description: "Diagnosis code"
+          - name: diagnosis_description
+            description: "Description of the diagnosis"
+          - name: diagnosis_datetime
+            description: "Date and time of diagnosis"
+          - name: diagnosis_type
+            description: "Type of diagnosis"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+      - name: file_processing_log
+        description: "Log of HL7 file processing activities"
+        columns:
+          - name: s3_key
+            description: "S3 object key"
+          - name: file_name
+            description: "Name of the processed file"
+          - name: file_size
+            description: "Size of the file in bytes"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processing_status
+            description: "Status of file processing"
+          - name: records_loaded
+            description: "Number of records loaded from file"
+          - name: error_message
+            description: "Error message if processing failed"
+          - name: processed_at
+            description: "Timestamp when file was processed"
+          - name: last_modified
+            description: "Last modified timestamp of the file"
+
+      - name: guarantors
+        description: "Patient guarantor information from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: guarantor_number
+            description: "Guarantor identification number"
+          - name: guarantor_name
+            description: "Name of the guarantor"
+          - name: guarantor_address
+            description: "Address of the guarantor"
+          - name: guarantor_phone_home
+            description: "Home phone number of guarantor"
+          - name: guarantor_phone_business
+            description: "Business phone number of guarantor"
+          - name: guarantor_dob
+            description: "Date of birth of guarantor"
+          - name: guarantor_gender
+            description: "Gender of the guarantor"
+          - name: guarantor_relationship
+            description: "Relationship to patient"
+          - name: guarantor_ssn
+            description: "Social Security Number of guarantor"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+      - name: hl7_messages
+        description: "Raw HL7 messages and metadata"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: message_type
+            description: "Type of HL7 message (ADT, ORM, etc.)"
+          - name: message_event
+            description: "Event type of the message"
+          - name: sending_application
+            description: "Application that sent the message"
+          - name: sending_facility
+            description: "Facility that sent the message"
+          - name: receiving_application
+            description: "Application receiving the message"
+          - name: receiving_facility
+            description: "Facility receiving the message"
+          - name: message_datetime
+            description: "Date and time of message creation"
+          - name: message_control_id
+            description: "Control ID for message tracking"
+          - name: processing_id
+            description: "Processing ID"
+          - name: version_id
+            description: "HL7 version identifier"
+          - name: raw_message
+            description: "Complete raw HL7 message"
+          - name: file_name
+            description: "Source file name"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: s3_path
+            description: "Full S3 path to source file"
+          - name: processed_at
+            description: "Timestamp when message was processed"
+
+      - name: insurance
+        description: "Patient insurance information from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: insurance_plan_id
+            description: "Insurance plan identifier"
+          - name: insurance_company_name
+            description: "Name of insurance company"
+          - name: insurance_address
+            description: "Address of insurance company"
+          - name: phone_number
+            description: "Phone number of insurance company"
+          - name: group_name
+            description: "Insurance group name"
+          - name: insured_name
+            description: "Name of insured person"
+          - name: relationship
+            description: "Relationship of insured to patient"
+          - name: insured_dob
+            description: "Date of birth of insured"
+          - name: insured_address
+            description: "Address of insured person"
+          - name: plan_type
+            description: "Type of insurance plan"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+      - name: notes
+        description: "Clinical notes and comments from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: set_id
+            description: "Set ID for the note"
+          - name: source_of_comment
+            description: "Source of the clinical comment"
+          - name: comment
+            description: "Clinical comment text"
+          - name: comment_type
+            description: "Type of comment"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+      - name: observations
+        description: "Clinical observations and test results from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: set_id
+            description: "Set ID for the observation"
+          - name: value_type
+            description: "Type of observation value"
+          - name: observation_id
+            description: "Observation identifier"
+          - name: observation_value
+            description: "Value of the observation"
+          - name: units
+            description: "Units of measurement"
+          - name: reference_range
+            description: "Normal reference range"
+          - name: abnormal_flags
+            description: "Flags indicating abnormal results"
+          - name: probability
+            description: "Probability score"
+          - name: nature_of_abnormal_test
+            description: "Nature of abnormal test result"
+          - name: observation_result_status
+            description: "Status of the observation result"
+          - name: observation_datetime
+            description: "Date and time of observation"
+          - name: observation_method
+            description: "Method used for observation"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+      - name: orders
+        description: "Clinical orders from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: order_control
+            description: "Order control code"
+          - name: placer_order_number
+            description: "Placer order number"
+          - name: filler_order_number
+            description: "Filler order number"
+          - name: universal_service_id
+            description: "Universal service identifier"
+          - name: priority
+            description: "Priority of the order"
+          - name: requested_datetime
+            description: "Date and time order was requested"
+          - name: observation_datetime
+            description: "Date and time of observation"
+          - name: ordering_provider
+            description: "Provider who placed the order"
+          - name: result_copies_to
+            description: "Recipients of result copies"
+          - name: parent_order
+            description: "Parent order reference"
+          - name: order_status
+            description: "Status of the order"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+      - name: patients
+        description: "Patient demographic information from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: patient_name
+            description: "Full patient name"
+          - name: last_name
+            description: "Patient last name"
+          - name: first_name
+            description: "Patient first name"
+          - name: middle_name
+            description: "Patient middle name"
+          - name: mother_maiden_name
+            description: "Mother's maiden name"
+          - name: date_of_birth
+            description: "Patient date of birth"
+          - name: gender
+            description: "Patient gender"
+          - name: race
+            description: "Patient race"
+          - name: address
+            description: "Patient address"
+          - name: phone_home
+            description: "Home phone number"
+          - name: phone_business
+            description: "Business phone number"
+          - name: language
+            description: "Preferred language"
+          - name: marital_status
+            description: "Marital status"
+          - name: religion
+            description: "Religious affiliation"
+          - name: account_number
+            description: "Patient account number"
+          - name: ssn
+            description: "Social Security Number"
+          - name: drivers_license
+            description: "Driver's license number"
+          - name: nationality
+            description: "Patient nationality"
+          - name: death_datetime
+            description: "Date and time of death if applicable"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+      - name: patient_visits
+        description: "Patient visit and encounter information from HL7 messages"
+        columns:
+          - name: message_id
+            description: "Unique identifier for the HL7 message"
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: visit_number
+            description: "Visit identification number"
+          - name: patient_class
+            description: "Class of patient (inpatient, outpatient, etc.)"
+          - name: assigned_patient_location
+            description: "Assigned patient location"
+          - name: admission_type
+            description: "Type of admission"
+          - name: attending_doctor
+            description: "Attending physician"
+          - name: referring_doctor
+            description: "Referring physician"
+          - name: consulting_doctor
+            description: "Consulting physician"
+          - name: hospital_service
+            description: "Hospital service department"
+          - name: patient_type
+            description: "Type of patient"
+          - name: admission_datetime
+            description: "Date and time of admission"
+          - name: discharge_datetime
+            description: "Date and time of discharge"
+          - name: visit_indicator
+            description: "Visit indicator code"
+          - name: source_folder
+            description: "Source folder path in S3"
+          - name: processed_at
+            description: "Timestamp when record was processed"
+
+  - name: csv
+    description: "CSV schema containing healthcare data imported from CSV files (Synthea format)"
+    database: raw_db
+    schema: csv
+    tables:
+      - name: allergies
+        description: "Patient allergy information"
+        columns:
+          - name: start
+            description: "Start date of allergy"
+          - name: stop
+            description: "Stop date of allergy"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: code
+            description: "Allergy code"
+          - name: system
+            description: "Coding system used"
+          - name: description
+            description: "Allergy description"
+          - name: type
+            description: "Type of allergy"
+          - name: category
+            description: "Allergy category"
+          - name: reaction1
+            description: "First reaction code"
+          - name: description1
+            description: "First reaction description"
+          - name: severity1
+            description: "First reaction severity"
+          - name: reaction2
+            description: "Second reaction code"
+          - name: description2
+            description: "Second reaction description"
+          - name: severity2
+            description: "Second reaction severity"
+
+      - name: careplans
+        description: "Patient care plans"
+        columns:
+          - name: id
+            description: "Care plan identifier"
+          - name: start
+            description: "Start date of care plan"
+          - name: stop
+            description: "Stop date of care plan"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: code
+            description: "Care plan code"
+          - name: description
+            description: "Care plan description"
+          - name: reasoncode
+            description: "Reason code for care plan"
+          - name: reasondescription
+            description: "Reason description"
+
+      - name: claims
+        description: "Healthcare claims information"
+        columns:
+          - name: id
+            description: "Claim identifier"
+          - name: patientid
+            description: "Patient identifier"
+          - name: providerid
+            description: "Provider identifier"
+          - name: primarypatientinsuranceid
+            description: "Primary insurance ID"
+          - name: secondarypatientinsuranceid
+            description: "Secondary insurance ID"
+          - name: departmentid
+            description: "Department identifier"
+          - name: patientdepartmentid
+            description: "Patient department identifier"
+          - name: diagnosis1
+            description: "Primary diagnosis code"
+          - name: diagnosis2
+            description: "Secondary diagnosis code"
+          - name: diagnosis3
+            description: "Tertiary diagnosis code"
+          - name: diagnosis4
+            description: "Fourth diagnosis code"
+          - name: diagnosis5
+            description: "Fifth diagnosis code"
+          - name: diagnosis6
+            description: "Sixth diagnosis code"
+          - name: diagnosis7
+            description: "Seventh diagnosis code"
+          - name: diagnosis8
+            description: "Eighth diagnosis code"
+          - name: referringproviderid
+            description: "Referring provider identifier"
+          - name: appointmentid
+            description: "Appointment identifier"
+          - name: currentillnessdate
+            description: "Current illness date"
+          - name: servicedate
+            description: "Date of service"
+          - name: supervisingproviderid
+            description: "Supervising provider identifier"
+          - name: status1
+            description: "Status for primary insurance"
+          - name: status2
+            description: "Status for secondary insurance"
+          - name: statusp
+            description: "Patient status"
+          - name: outstanding1
+            description: "Outstanding amount for primary insurance"
+          - name: outstanding2
+            description: "Outstanding amount for secondary insurance"
+          - name: outstandingp
+            description: "Outstanding patient amount"
+          - name: lastbilleddate1
+            description: "Last billed date for primary insurance"
+          - name: lastbilleddate2
+            description: "Last billed date for secondary insurance"
+          - name: lastbilleddatep
+            description: "Last billed date for patient"
+          - name: healthcareclaimtypeid1
+            description: "Healthcare claim type for primary insurance"
+          - name: healthcareclaimtypeid2
+            description: "Healthcare claim type for secondary insurance"
+
+      - name: claims_transactions
+        description: "Individual claim transactions"
+        columns:
+          - name: id
+            description: "Transaction identifier"
+          - name: claimid
+            description: "Claim identifier"
+          - name: chargeid
+            description: "Charge identifier"
+          - name: patientid
+            description: "Patient identifier"
+          - name: type
+            description: "Transaction type"
+          - name: amount
+            description: "Transaction amount"
+          - name: method
+            description: "Payment method"
+          - name: fromdate
+            description: "Start date of service"
+          - name: todate
+            description: "End date of service"
+          - name: placeofservice
+            description: "Place of service code"
+          - name: procedurecode
+            description: "Procedure code"
+          - name: modifier1
+            description: "First procedure modifier"
+          - name: modifier2
+            description: "Second procedure modifier"
+          - name: diagnosisref1
+            description: "First diagnosis reference"
+          - name: diagnosisref2
+            description: "Second diagnosis reference"
+          - name: diagnosisref3
+            description: "Third diagnosis reference"
+          - name: diagnosisref4
+            description: "Fourth diagnosis reference"
+          - name: units
+            description: "Number of units"
+          - name: departmentid
+            description: "Department identifier"
+          - name: notes
+            description: "Transaction notes"
+          - name: unitamount
+            description: "Amount per unit"
+          - name: transferoutid
+            description: "Transfer out identifier"
+          - name: transfertype
+            description: "Type of transfer"
+          - name: payments
+            description: "Payment amount"
+          - name: adjustments
+            description: "Adjustment amount"
+          - name: transfers
+            description: "Transfer amount"
+          - name: outstanding
+            description: "Outstanding amount"
+          - name: appointmentid
+            description: "Appointment identifier"
+          - name: linenote
+            description: "Line item note"
+          - name: patientinsuranceid
+            description: "Patient insurance identifier"
+          - name: feescheduleid
+            description: "Fee schedule identifier"
+          - name: providerid
+            description: "Provider identifier"
+          - name: supervisingproviderid
+            description: "Supervising provider identifier"
+
+      - name: conditions
+        description: "Patient conditions and diagnoses"
+        columns:
+          - name: start
+            description: "Start date of condition"
+          - name: stop
+            description: "Stop date of condition"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: code
+            description: "Condition code"
+          - name: description
+            description: "Condition description"
+
+      - name: devices
+        description: "Medical devices assigned to patients"
+        columns:
+          - name: start
+            description: "Start date of device use"
+          - name: stop
+            description: "Stop date of device use"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: code
+            description: "Device code"
+          - name: description
+            description: "Device description"
+          - name: udi
+            description: "Unique Device Identifier"
+
+      - name: encounters
+        description: "Patient encounters"
+        columns:
+          - name: id
+            description: "Encounter identifier"
+          - name: start
+            description: "Start date and time of encounter"
+          - name: stop
+            description: "Stop date and time of encounter"
+          - name: patient
+            description: "Patient identifier"
+          - name: organization
+            description: "Organization identifier"
+          - name: provider
+            description: "Provider identifier"
+          - name: payer
+            description: "Payer identifier"
+          - name: encounterclass
+            description: "Class of encounter"
+          - name: code
+            description: "Encounter code"
+          - name: description
+            description: "Encounter description"
+          - name: base_encounter_cost
+            description: "Base cost of encounter"
+          - name: total_claim_cost
+            description: "Total claim cost"
+          - name: payer_coverage
+            description: "Amount covered by payer"
+          - name: reasoncode
+            description: "Reason code for encounter"
+          - name: reasondescription
+            description: "Reason description"
+
+      - name: file_load_tracking
+        description: "Tracking of CSV file loads"
+        columns:
+          - name: file_name
+            description: "Name of the loaded file"
+          - name: table_name
+            description: "Target table name"
+          - name: file_size_bytes
+            description: "File size in bytes"
+          - name: rows_loaded
+            description: "Number of rows loaded"
+          - name: load_timestamp
+            description: "Timestamp of load"
+          - name: status
+            description: "Load status"
+          - name: error_message
+            description: "Error message if load failed"
+
+      - name: imaging_studies
+        description: "Medical imaging studies"
+        columns:
+          - name: id
+            description: "Imaging study identifier"
+          - name: date
+            description: "Date of imaging study"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: series_uid
+            description: "Series unique identifier"
+          - name: bodysite_code
+            description: "Body site code"
+          - name: bodysite_description
+            description: "Body site description"
+          - name: modality_code
+            description: "Imaging modality code"
+          - name: modality_description
+            description: "Imaging modality description"
+          - name: instance_uid
+            description: "Instance unique identifier"
+          - name: sop_code
+            description: "SOP class code"
+          - name: sop_description
+            description: "SOP class description"
+          - name: procedure_code
+            description: "Procedure code"
+
+      - name: immunizations
+        description: "Patient immunization records"
+        columns:
+          - name: date
+            description: "Date of immunization"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: code
+            description: "Immunization code"
+          - name: description
+            description: "Immunization description"
+          - name: base_cost
+            description: "Base cost of immunization"
+
+      - name: medications
+        description: "Patient medication records"
+        columns:
+          - name: start
+            description: "Start date of medication"
+          - name: stop
+            description: "Stop date of medication"
+          - name: patient
+            description: "Patient identifier"
+          - name: payer
+            description: "Payer identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: code
+            description: "Medication code"
+          - name: description
+            description: "Medication description"
+          - name: base_cost
+            description: "Base cost of medication"
+          - name: payer_coverage
+            description: "Amount covered by payer"
+          - name: dispenses
+            description: "Number of dispenses"
+          - name: totalcost
+            description: "Total cost of medication"
+          - name: reasoncode
+            description: "Reason code for medication"
+          - name: reasondescription
+            description: "Reason description"
+
+      - name: observations
+        description: "Clinical observations and measurements"
+        columns:
+          - name: date
+            description: "Date of observation"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: category
+            description: "Observation category"
+          - name: code
+            description: "Observation code"
+          - name: description
+            description: "Observation description"
+          - name: value
+            description: "Observation value"
+          - name: units
+            description: "Units of measurement"
+          - name: type
+            description: "Observation type"
+
+      - name: organizations
+        description: "Healthcare organizations"
+        columns:
+          - name: id
+            description: "Organization identifier"
+          - name: name
+            description: "Organization name"
+          - name: address
+            description: "Street address"
+          - name: city
+            description: "City"
+          - name: state
+            description: "State"
+          - name: zip
+            description: "ZIP code"
+          - name: lat
+            description: "Latitude"
+          - name: lon
+            description: "Longitude"
+          - name: phone
+            description: "Phone number"
+          - name: revenue
+            description: "Organization revenue"
+          - name: utilization
+            description: "Utilization metric"
+
+      - name: patients
+        description: "Patient demographic information"
+        columns:
+          - name: id
+            description: "Patient identifier"
+          - name: birthdate
+            description: "Date of birth"
+          - name: deathdate
+            description: "Date of death if applicable"
+          - name: ssn
+            description: "Social Security Number"
+          - name: drivers
+            description: "Driver's license number"
+          - name: passport
+            description: "Passport number"
+          - name: prefix
+            description: "Name prefix"
+          - name: first
+            description: "First name"
+          - name: last
+            description: "Last name"
+          - name: suffix
+            description: "Name suffix"
+          - name: maiden
+            description: "Maiden name"
+          - name: marital
+            description: "Marital status"
+          - name: race
+            description: "Race"
+          - name: ethnicity
+            description: "Ethnicity"
+          - name: gender
+            description: "Gender"
+          - name: birthplace
+            description: "Place of birth"
+          - name: address
+            description: "Street address"
+          - name: city
+            description: "City"
+          - name: state
+            description: "State"
+          - name: county
+            description: "County"
+          - name: fips
+            description: "FIPS code"
+          - name: zip
+            description: "ZIP code"
+          - name: lat
+            description: "Latitude"
+          - name: lon
+            description: "Longitude"
+          - name: healthcare_expenses
+            description: "Total healthcare expenses"
+          - name: healthcare_coverage
+            description: "Total healthcare coverage"
+          - name: income
+            description: "Annual income"
+
+      - name: payers
+        description: "Insurance payer information"
+        columns:
+          - name: id
+            description: "Payer identifier"
+          - name: name
+            description: "Payer name"
+          - name: ownership
+            description: "Ownership type"
+          - name: address
+            description: "Street address"
+          - name: city
+            description: "City"
+          - name: state_headquartered
+            description: "State where headquartered"
+          - name: zip
+            description: "ZIP code"
+          - name: phone
+            description: "Phone number"
+          - name: amount_covered
+            description: "Total amount covered"
+          - name: amount_uncovered
+            description: "Total amount uncovered"
+          - name: revenue
+            description: "Revenue"
+          - name: covered_encounters
+            description: "Number of covered encounters"
+          - name: uncovered_encounters
+            description: "Number of uncovered encounters"
+          - name: covered_medications
+            description: "Number of covered medications"
+          - name: uncovered_medications
+            description: "Number of uncovered medications"
+          - name: covered_procedures
+            description: "Number of covered procedures"
+          - name: uncovered_procedures
+            description: "Number of uncovered procedures"
+          - name: covered_immunizations
+            description: "Number of covered immunizations"
+          - name: uncovered_immunizations
+            description: "Number of uncovered immunizations"
+          - name: unique_customers
+            description: "Number of unique customers"
+          - name: qols_avg
+            description: "Average quality of life score"
+          - name: member_months
+            description: "Total member months"
+
+      - name: payer_transitions
+        description: "Patient insurance payer transitions"
+        columns:
+          - name: patient
+            description: "Patient identifier"
+          - name: memberid
+            description: "Member identifier"
+          - name: start_date
+            description: "Start date of coverage"
+          - name: end_date
+            description: "End date of coverage"
+          - name: payer
+            description: "Payer identifier"
+          - name: secondary_payer
+            description: "Secondary payer identifier"
+          - name: plan_ownership
+            description: "Plan ownership type"
+          - name: owner_name
+            description: "Owner name"
+
+      - name: procedures
+        description: "Medical procedures performed"
+        columns:
+          - name: start
+            description: "Start date and time of procedure"
+          - name: stop
+            description: "Stop date and time of procedure"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: code
+            description: "Procedure code"
+          - name: description
+            description: "Procedure description"
+          - name: base_cost
+            description: "Base cost of procedure"
+          - name: reasoncode
+            description: "Reason code for procedure"
+          - name: reasondescription
+            description: "Reason description"
+
+      - name: providers
+        description: "Healthcare provider information"
+        columns:
+          - name: id
+            description: "Provider identifier"
+          - name: organization
+            description: "Organization identifier"
+          - name: name
+            description: "Provider name"
+          - name: gender
+            description: "Provider gender"
+          - name: speciality
+            description: "Provider specialty"
+          - name: address
+            description: "Street address"
+          - name: city
+            description: "City"
+          - name: state
+            description: "State"
+          - name: zip
+            description: "ZIP code"
+          - name: lat
+            description: "Latitude"
+          - name: lon
+            description: "Longitude"
+          - name: encounters
+            description: "Number of encounters"
+          - name: procedures
+            description: "Number of procedures"
+
+      - name: supplies
+        description: "Medical supplies used"
+        columns:
+          - name: date
+            description: "Date supply was used"
+          - name: patient
+            description: "Patient identifier"
+          - name: encounter
+            description: "Encounter identifier"
+          - name: code
+            description: "Supply code"
+          - name: description
+            description: "Supply description"
+          - name: quantity
+            description: "Quantity of supply used"
+
+  - name: ccda
+    description: "CCDA schema containing healthcare data in C-CDA (Consolidated Clinical Document Architecture) format"
+    database: raw_db
+    schema: ccda
+    tables:
+      - name: allergies
+        description: "Patient allergy information from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: allergen_code
+            description: "Code for the allergen"
+          - name: allergen_display
+            description: "Display name of allergen"
+          - name: reaction_code
+            description: "Code for allergic reaction"
+          - name: reaction_display
+            description: "Display name of reaction"
+          - name: severity
+            description: "Severity level of allergy"
+          - name: status
+            description: "Status of the allergy"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: diagnostic_results
+        description: "Diagnostic test results from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: observation_index
+            description: "Observation index within entry"
+          - name: panel_code
+            description: "Code for diagnostic panel"
+          - name: panel_display
+            description: "Display name of panel"
+          - name: observation_code
+            description: "Code for specific observation"
+          - name: observation_display
+            description: "Display name of observation"
+          - name: value
+            description: "Observation value"
+          - name: unit
+            description: "Unit of measurement"
+          - name: effective_time
+            description: "Effective time of observation"
+          - name: status
+            description: "Status of the observation"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: encounters
+        description: "Patient encounters from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: encounter_code
+            description: "Code for encounter type"
+          - name: encounter_display
+            description: "Display name of encounter"
+          - name: start_time
+            description: "Start time of encounter"
+          - name: end_time
+            description: "End time of encounter"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: file_processing_tracking
+        description: "Tracking of CCDA file processing"
+        columns:
+          - name: file_name
+            description: "Name of the CCDA file"
+          - name: s3_bucket
+            description: "S3 bucket name"
+          - name: s3_key
+            description: "S3 object key"
+          - name: file_size
+            description: "Size of file in bytes"
+          - name: last_modified
+            description: "Last modified timestamp of file"
+          - name: processed_at
+            description: "Timestamp when file was processed"
+          - name: processing_status
+            description: "Status of file processing"
+          - name: patient_id
+            description: "Patient identifier from document"
+          - name: error_message
+            description: "Error message if processing failed"
+
+      - name: functional_status
+        description: "Patient functional status assessments from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: assessment_code
+            description: "Code for functional assessment"
+          - name: assessment_display
+            description: "Display name of assessment"
+          - name: score_value
+            description: "Score or value of assessment"
+          - name: effective_time
+            description: "Effective time of assessment"
+          - name: status
+            description: "Status of the assessment"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: generic
+        description: "Generic sections from CCDA documents not fitting other categories"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: section_code
+            description: "Code for document section"
+          - name: section_display
+            description: "Display name of section"
+          - name: entry_index
+            description: "Entry index within section"
+          - name: text_content
+            description: "Text content of the entry"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: immunizations
+        description: "Patient immunization records from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: vaccine_code
+            description: "Code for vaccine"
+          - name: vaccine_display
+            description: "Display name of vaccine"
+          - name: administration_date
+            description: "Date vaccine was administered"
+          - name: status
+            description: "Status of immunization"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: medications
+        description: "Patient medication records from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: medication_code
+            description: "Code for medication"
+          - name: medication_display
+            description: "Display name of medication"
+          - name: dosage
+            description: "Dosage amount"
+          - name: frequency
+            description: "Frequency of administration"
+          - name: route
+            description: "Route of administration"
+          - name: status
+            description: "Status of medication"
+          - name: start_date
+            description: "Start date of medication"
+          - name: end_date
+            description: "End date of medication"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: patient_demographics
+        description: "Patient demographic information from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: patient_first_name
+            description: "Patient first name"
+          - name: patient_last_name
+            description: "Patient last name"
+          - name: birth_date
+            description: "Date of birth"
+          - name: gender
+            description: "Patient gender"
+          - name: address_line
+            description: "Street address"
+          - name: city
+            description: "City"
+          - name: state
+            description: "State"
+          - name: postal_code
+            description: "Postal/ZIP code"
+          - name: race_code
+            description: "Code for race"
+          - name: race_display
+            description: "Display name of race"
+          - name: ethnicity_code
+            description: "Code for ethnicity"
+          - name: ethnicity_display
+            description: "Display name of ethnicity"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: problems
+        description: "Patient problem list from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: observation_id
+            description: "Observation identifier"
+          - name: condition_code
+            description: "Code for condition/problem"
+          - name: condition_display
+            description: "Display name of condition"
+          - name: status
+            description: "Status of the problem"
+          - name: start_date
+            description: "Start date of problem"
+          - name: end_date
+            description: "End date of problem"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: procedures
+        description: "Medical procedures from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: procedure_code
+            description: "Code for procedure"
+          - name: procedure_display
+            description: "Display name of procedure"
+          - name: status
+            description: "Status of the procedure"
+          - name: effective_time
+            description: "Time procedure was performed"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: social_history
+        description: "Patient social history from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: observation_code
+            description: "Code for social history observation"
+          - name: observation_display
+            description: "Display name of observation"
+          - name: value_code
+            description: "Code for observation value"
+          - name: value_display
+            description: "Display name of value"
+          - name: effective_time
+            description: "Effective time of observation"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: treatment_plans
+        description: "Patient treatment plans from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: entry_type
+            description: "Type of treatment plan entry"
+          - name: plan_code
+            description: "Code for treatment plan"
+          - name: plan_display
+            description: "Display name of plan"
+          - name: plan_text
+            description: "Detailed text of treatment plan"
+          - name: status
+            description: "Status of the treatment plan"
+          - name: effective_time
+            description: "Effective time of plan"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: vital_signs
+        description: "Patient vital signs from CCDA documents"
+        columns:
+          - name: patient_id
+            description: "Unique patient identifier"
+          - name: entry_index
+            description: "Entry index within document"
+          - name: observation_index
+            description: "Observation index within entry"
+          - name: vital_code
+            description: "Code for vital sign"
+          - name: vital_display
+            description: "Display name of vital sign"
+          - name: value
+            description: "Value of vital sign"
+          - name: unit
+            description: "Unit of measurement"
+          - name: effective_time
+            description: "Time vital sign was recorded"
+          - name: status
+            description: "Status of the vital sign"
+          - name: created_at
+            description: "Timestamp when record was created"

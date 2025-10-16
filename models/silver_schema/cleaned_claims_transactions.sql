@@ -1,0 +1,31 @@
+select distinct
+
+	CLAIMID,
+	CHARGEID,
+	PATIENTID,
+	TYPE,
+	coalesce(AMOUNT,0) as amount,
+	coalesce(METHOD,'unknown') as method,
+	CAST(fromdate AS DATE) AS fromdate,
+	CAST(todate AS DATE) AS todate,
+	PLACEOFSERVICE,
+	PROCEDURECODE,
+	DIAGNOSISREF1,
+	
+	UNITS,
+	DEPARTMENTID,
+	NOTES,
+	UNITAMOUNT,
+	coalesce(TRANSFERTYPE,'unknown') as TRANSFERTYPE,
+	PAYMENTS,
+
+	coalesce(TRANSFERS,0) as TRANSFERS,
+	OUTSTANDING,
+	APPOINTMENTID,
+	
+	coalesce(PATIENTINSURANCEID,'unknown') as PATIENTINSURANCEID,
+	FEESCHEDULEID,
+	PROVIDERID,
+	SUPERVISINGPROVIDERID
+
+    from {{ ref('claims_transactions') }}

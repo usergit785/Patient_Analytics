@@ -1,0 +1,14 @@
+WITH cleaned_immunizations AS (
+  SELECT 
+    ADMINISTRATION_DATE,
+    PATIENT_ID,
+    COALESCE(ENCOUNTER, 'unknown') AS ENCOUNTER,
+    COALESCE(CODE, 0) AS CODE,
+    COALESCE(DESCRIPTION, 'unknown') AS DESCRIPTION,
+    COALESCE(VACCINE_DISPLAY, 'unknown') AS VACCINE_DISPLAY,
+    COALESCE(BASE_COST, 0) AS BASE_COST
+  FROM {{ ref('immunizations') }}
+)
+
+SELECT DISTINCT *
+FROM cleaned_immunizations

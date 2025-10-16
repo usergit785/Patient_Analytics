@@ -1,0 +1,12 @@
+SELECT
+    TO_DATE(DATE) AS DATE,
+    PATIENT,
+    ENCOUNTER,
+    BODYSITE_CODE,
+    BODYSITE_DESCRIPTION,
+    MODALITY_CODE,
+    MODALITY_DESCRIPTION,
+    SOP_CODE,
+    SOP_DESCRIPTION,
+    PROCEDURE_CODE
+FROM {{ source('patient_analytics_csv', 'imaging_studies') }}
