@@ -18,7 +18,7 @@ with unified_organization as (
         cast(REVENUE as float) as REVENUE,                -- revenue metric
         cast(UTILIZATION as float) as UTILIZATION       -- utilization metric
                         
-    from {{ source('csv', 'organizations') }}
+    from {{ source('patient_analytics_csv', 'organizations') }}
 
 )
 

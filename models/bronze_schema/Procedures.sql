@@ -19,8 +19,9 @@ with unified_procedures as (
         cast(null as varchar) as SOURCE_FOLDER,                  -- placeholder
         cast(null as timestamp_ntz) as PROCESSED_AT,             -- ingestion timestamp
         'CSV' as SOURCE_SYSTEM                                   -- lineage marker
-    from {{ source('csv', 'procedures') }}
+    from {{ source('patient_analytics_csv', 'procedures') }}
 
 )
+
 
 select * from unified_procedures

@@ -19,7 +19,7 @@ with unified_observations as (
         OBSERVATION_RESULT_STATUS as RESULT_STATUS,
         to_date(OBSERVATION_DATETIME) as OBSERVATION_DATE,
         OBSERVATION_METHOD
-    from {{ source('hl7', 'observations') }}
+    from {{ source('patient_analytics_src', 'observations') }}
 
     union all
 
@@ -38,7 +38,7 @@ with unified_observations as (
         null as RESULT_STATUS,
         to_date(to_timestamp_tz(DATE,'YYYY-MM-DD"T"HH24:MI:SS"Z"')) as OBSERVATION_DATE,
         TYPE as OBSERVATION_METHOD
-    from {{ source('csv', 'observations') }}
+    from {{ source('patient_analytics_csv', 'observations') }}
 )
 
 select * from unified_observations

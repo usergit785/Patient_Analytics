@@ -15,7 +15,7 @@ with unified_payer_transitions as (
         to_date(to_timestamp_tz(END_DATE,'YYYY-MM-DD"T"HH24:MI:SS"Z"')) as COVERAGE_END_DATE   
                 
                                                                   -- lineage marker
-    from {{ source('csv', 'payer_transitions') }}
+    from {{ source('patient_analytics_csv', 'payer_transitions') }}
 
 )
 

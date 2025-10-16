@@ -9,8 +9,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ENCOUNTER
         description: "Encounter identifier"
       - name: CODE
@@ -45,8 +46,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ENCOUNTER
         description: "Encounter identifier"
       - name: CODE
@@ -66,14 +68,16 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: PROVIDERID
         description: "Provider identifier"
         tests:
           - relationships:
-              to: ref('CLEANSED_PROVIDERS')
-              field: PROVIDER_ID
+              arguments:
+                to: ref('CLEANSED_PROVIDERS')
+                field: PROVIDER_ID
       - name: PRIMARYPATIENTINSURANCEID
         description: "Primary insurance identifier"
       - name: SECONDARYPATIENTINSURANCEID
@@ -103,14 +107,16 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: TYPE
         description: "Transaction type (charge, payment, adjustment)"
         tests:
           - not_null
           - accepted_values:
-              values: ['charge', 'payment', 'adjustment', 'transfer']
+              arguments:
+                values: ['charge', 'payment', 'adjustment', 'transfer']
       - name: AMOUNT
         description: "Transaction amount"
         tests:
@@ -143,7 +149,8 @@ models:
         description: "Coding method (ICD-9, ICD-10)"
         tests:
           - accepted_values:
-              values: ['ICD-9', 'ICD-10', 'SNOMED-CT']
+              arguments:
+                values: ['ICD-9', 'ICD-10', 'SNOMED-CT']
       - name: START_DATE
         description: "Diagnosis start date"
       - name: END_DATE
@@ -153,8 +160,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: CODE
         description: "Diagnosis code"
         tests:
@@ -170,32 +178,37 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ORGANIZATION
         description: "Organization identifier"
         tests:
           - relationships:
-              to: ref('CLEANSED_ORGANIZATIONS')
-              field: ORGANIZATION_ID
+              arguments:
+                to: ref('CLEANSED_ORGANIZATIONS')
+                field: ORGANIZATION_ID
       - name: PROVIDER
         description: "Provider identifier"
         tests:
           - relationships:
-              to: ref('CLEANSED_PROVIDERS')
-              field: PROVIDER_ID
+              arguments:
+                to: ref('CLEANSED_PROVIDERS')
+                field: PROVIDER_ID
       - name: PAYER
         description: "Payer identifier"
         tests:
           - relationships:
-              to: ref('CLEANSED_PAYERS')
-              field: PAYER_ID
+              arguments:
+                to: ref('CLEANSED_PAYERS')
+                field: PAYER_ID
       - name: ENCOUNTERCLASS
         description: "Encounter class"
         tests:
           - not_null
           - accepted_values:
-              values: ['inpatient', 'outpatient', 'ambulatory', 'emergency', 'urgentcare', 'wellness']
+              arguments:
+                values: ['inpatient', 'outpatient', 'ambulatory', 'emergency', 'urgentcare', 'wellness']
       - name: START_DATE
         description: "Encounter start date"
         tests:
@@ -223,8 +236,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ENCOUNTER
         description: "Encounter identifier"
       - name: BODYSITE_CODE
@@ -250,8 +264,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ENCOUNTER
         description: "Encounter identifier"
       - name: CODE
@@ -293,7 +308,8 @@ models:
         description: "Patient gender"
         tests:
           - accepted_values:
-              values: ['M', 'F', 'O', 'U']
+              arguments:
+                values: ['M', 'F', 'O', 'U']
       - name: RACE
         description: "Patient race"
       - name: LANGUAGE
@@ -323,8 +339,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ENCOUNTER_ID
         description: "Encounter identifier"
       - name: DEVICE_CODE
@@ -352,8 +369,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ENCOUNTER_ID
         description: "Encounter identifier"
       - name: MEDICATION_CODE
@@ -377,13 +395,15 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: VALUE_TYPE
         description: "Type of observation value"
         tests:
           - accepted_values:
-              values: ['numeric', 'text', 'coded']
+              arguments:
+                values: ['numeric', 'text', 'coded']
       - name: OBSERVATION_CODE
         description: "Observation code"
         tests:
@@ -457,8 +477,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: MEMBER_ID
         description: "Member identifier"
       - name: PAYER_ID
@@ -466,8 +487,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANSED_PAYERS')
-              field: PAYER_ID
+              arguments:
+                to: ref('CLEANSED_PAYERS')
+                field: PAYER_ID
       - name: SECONDARY_PAYER_ID
         description: "Secondary payer identifier"
       - name: PLAN_OWNERSHIP
@@ -489,8 +511,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ENCOUNTER_ID
         description: "Encounter identifier"
       - name: PROCEDURE_CODE
@@ -524,8 +547,9 @@ models:
         description: "Associated organization identifier"
         tests:
           - relationships:
-              to: ref('CLEANSED_ORGANIZATIONS')
-              field: ORGANIZATION_ID
+              arguments:
+                to: ref('CLEANSED_ORGANIZATIONS')
+                field: ORGANIZATION_ID
       - name: PROVIDER_NAME
         description: "Provider name"
         tests:
@@ -555,8 +579,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('CLEANED_PATIENTS')
-              field: PATIENT_ID
+              arguments:
+                to: ref('CLEANED_PATIENTS')
+                field: PATIENT_ID
       - name: ENCOUNTER_ID
         description: "Encounter identifier"
       - name: SUPPLY_CODE
