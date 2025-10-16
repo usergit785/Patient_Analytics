@@ -15,7 +15,7 @@ with unified_supplies as (
         cast(QUANTITY as number) as SUPPLY_QUANTITY,             -- number of units
         cast(null as varchar) as SOURCE_FOLDER               -- placeholder
                                       -- lineage marker
-    from {{ source('csv', 'supplies') }}
+    from {{ source('patient_analytics_csv', 'supplies') }}
 
 )
 

@@ -2,9 +2,7 @@
     materialized='table'
 ) }}
 
-with unified_medications as (
-
-    -- 💊 1️⃣ CSV Medications
+with unified_medica
     select
         
         cast(PATIENT as varchar) as PATIENT_ID,
@@ -21,7 +19,8 @@ with unified_medications as (
         cast(null as varchar) as SOURCE_FOLDER,
         cast(null as timestamp_ntz) as PROCESSED_AT,
         'CSV' as SOURCE_SYSTEM
-    from {{ source('csv', 'medications') }}
+  
+    from {{ source('patient_analytics_csv', 'medications') }}
 
     union all
 
@@ -42,7 +41,7 @@ with unified_medications as (
         cast(null as varchar) as SOURCE_FOLDER,
         cast(CREATED_AT as timestamp_ntz) as PROCESSED_AT,
         'CCDA' as SOURCE_SYSTEM
-    from {{ source('ccda', 'medications') }}
+    from {{ source('patient_analytics_ccda', 'medications') }}
 
     union all
 
@@ -64,7 +63,7 @@ with unified_medications as (
         cast(SOURCE_FOLDER as varchar) as SOURCE_FOLDER,
         cast(PROCESSED_AT as timestamp_ntz) as PROCESSED_AT,
         'HL7' as SOURCE_SYSTEM
-    from {{ source('hl7', 'orders') }}
+    from {{ source('patient_analytics_src', 'orders') }}
 )
 
 select * from unified_medications

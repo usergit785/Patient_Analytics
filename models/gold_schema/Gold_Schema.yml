@@ -15,27 +15,31 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('PATIENT_DIM')
-              field: PATIENT_KEY
+              arguments:
+                to: ref('PATIENT_DIM')
+                field: PATIENT_KEY
       - name: PROVIDER_KEY
         description: "Foreign key to provider dimension"
         tests:
           - relationships:
-              to: ref('PROVIDER_DIM')
-              field: PROVIDER_KEY
+              arguments:
+                to: ref('PROVIDER_DIM')
+                field: PROVIDER_KEY
       - name: FROM_DATE_KEY
         description: "Foreign key to date dimension (from date)"
         tests:
           - not_null
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: TO_DATE_KEY
         description: "Foreign key to date dimension (to date)"
         tests:
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: CLAIM_ID
         description: "Business key for claim"
       - name: CHARGE_ID
@@ -86,39 +90,45 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('PATIENT_DIM')
-              field: PATIENT_KEY
+              arguments:
+                to: ref('PATIENT_DIM')
+                field: PATIENT_KEY
       - name: PROVIDER_KEY
         description: "Foreign key to provider dimension"
         tests:
           - relationships:
-              to: ref('PROVIDER_DIM')
-              field: PROVIDER_KEY
+              arguments:
+                to: ref('PROVIDER_DIM')
+                field: PROVIDER_KEY
       - name: ORGANIZATION_KEY
         description: "Foreign key to organization dimension"
         tests:
           - relationships:
-              to: ref('ORGANIZATION_DIM')
-              field: ORGANIZATION_KEY
+              arguments:
+                to: ref('ORGANIZATION_DIM')
+                field: ORGANIZATION_KEY
       - name: PAYER_KEY
         description: "Foreign key to payer dimension"
         tests:
           - relationships:
-              to: ref('PAYER_DIM')
-              field: PAYER_KEY
+              arguments:
+                to: ref('PAYER_DIM')
+                field: PAYER_KEY
       - name: START_DATE_KEY
         description: "Foreign key to date dimension (start date)"
         tests:
           - not_null
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: END_DATE_KEY
         description: "Foreign key to date dimension (end date)"
         tests:
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: PATIENT_ID
         description: "Business key for patient"
       - name: ENCOUNTER_CODE
@@ -128,7 +138,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['inpatient', 'outpatient', 'ambulatory', 'emergency', 'urgentcare', 'wellness']
+              arguments:
+                values: ['inpatient', 'outpatient', 'ambulatory', 'emergency', 'urgentcare', 'wellness']
       - name: ENCOUNTER_DESCRIPTION
         description: "Encounter description"
       - name: REASON_CODE
@@ -167,15 +178,17 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('PATIENT_DIM')
-              field: PATIENT_KEY
+              arguments:
+                to: ref('PATIENT_DIM')
+                field: PATIENT_KEY
       - name: ADMINISTRATION_DATE_KEY
         description: "Foreign key to date dimension"
         tests:
           - not_null
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: PATIENT_ID
         description: "Business key for patient"
       - name: ENCOUNTER_ID
@@ -212,28 +225,32 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('PATIENT_DIM')
-              field: PATIENT_KEY
+              arguments:
+                to: ref('PATIENT_DIM')
+                field: PATIENT_KEY
       - name: MEDICATION_DIM_KEY
         description: "Foreign key to medication dimension"
         tests:
           - not_null
           - relationships:
-              to: ref('MEDICATION_DIM')
-              field: MEDICATION_KEY
+              arguments:
+                to: ref('MEDICATION_DIM')
+                field: MEDICATION_KEY
       - name: MEDICATION_START_DATE_KEY
         description: "Foreign key to date dimension (start date)"
         tests:
           - not_null
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: MEDICATION_END_DATE_KEY
         description: "Foreign key to date dimension (end date)"
         tests:
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: PATIENT_ID
         description: "Business key for patient"
       - name: ENCOUNTER_ID
@@ -268,15 +285,17 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('PATIENT_DIM')
-              field: PATIENT_KEY
+              arguments:
+                to: ref('PATIENT_DIM')
+                field: PATIENT_KEY
       - name: OBSERVATION_DATE_KEY
         description: "Foreign key to date dimension"
         tests:
           - not_null
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: PATIENT_ID
         description: "Business key for patient"
       - name: OBSERVATION_CODE
@@ -287,7 +306,8 @@ models:
         description: "Type of observation value"
         tests:
           - accepted_values:
-              values: ['numeric', 'text', 'coded']
+              arguments:
+                values: ['numeric', 'text', 'coded']
       - name: UNITS
         description: "Unit of measurement"
       - name: RESULT_STATUS
@@ -326,28 +346,32 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('PATIENT_DIM')
-              field: PATIENT_KEY
+              arguments:
+                to: ref('PATIENT_DIM')
+                field: PATIENT_KEY
       - name: PROCEDURE_DIM_KEY
         description: "Foreign key to procedure dimension"
         tests:
           - not_null
           - relationships:
-              to: ref('PROCEDURE_DIM')
-              field: PROCEDURE_KEY
+              arguments:
+                to: ref('PROCEDURE_DIM')
+                field: PROCEDURE_KEY
       - name: PROCEDURE_START_DATE_KEY
         description: "Foreign key to date dimension (start date)"
         tests:
           - not_null
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: PROCEDURE_END_DATE_KEY
         description: "Foreign key to date dimension (end date)"
         tests:
           - relationships:
-              to: ref('DATE_DIM')
-              field: DATE_KEY
+              arguments:
+                to: ref('DATE_DIM')
+                field: DATE_KEY
       - name: PATIENT_ID
         description: "Business key for patient"
       - name: ENCOUNTER_ID
@@ -451,7 +475,8 @@ models:
         description: "Coding method (ICD-9, ICD-10)"
         tests:
           - accepted_values:
-              values: ['ICD-9', 'ICD-10', 'SNOMED-CT']
+              arguments:
+                values: ['ICD-9', 'ICD-10', 'SNOMED-CT']
       - name: DIAGNOSIS_CATEGORY
         description: "Category of diagnosis"
       - name: DW_CREATED_AT
@@ -554,7 +579,8 @@ models:
         description: "Patient gender"
         tests:
           - accepted_values:
-              values: ['M', 'F', 'O', 'U']
+              arguments:
+                values: ['M', 'F', 'O', 'U']
       - name: RACE
         description: "Patient race"
       - name: LANGUAGE

@@ -19,8 +19,9 @@ with unified_providers as (
         try_cast(LON as float) as LONGITUDE,                -- longitude (geo)
         try_cast(ENCOUNTERS as int) as ENCOUNTER_COUNT,     -- number of encounters
         try_cast(PROCEDURES as int) as PROCEDURE_COUNT                          -- lineage marker
-    from {{ source('csv', 'providers') }}
+    from {{ source('patient_analytics_csv', 'providers') }}
 
 )
+
 
 select * from unified_providers

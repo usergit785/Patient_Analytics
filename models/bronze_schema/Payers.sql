@@ -14,7 +14,7 @@ with unified_payers as (
         cast(ADDRESS as varchar) as ADDRESS,           -- street address (if exists)
         cast(CITY as varchar) as CITY                 -- city (if exists)
                              -- lineage marker
-    from {{ source('csv', 'payers') }}
+    from {{ source('patient_analytics_csv', 'payers') }}
 
 )
 
