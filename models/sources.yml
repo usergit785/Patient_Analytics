@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: hl7
+  - name: patient_analytics_src
     description: "HL7 schema containing healthcare data in HL7 message format"
     database: raw_db
     schema: hl7
@@ -348,7 +348,7 @@ sources:
           - name: processed_at
             description: "Timestamp when record was processed"
 
-  - name: csv
+  - name: patient_analytics_csv
     description: "CSV schema containing healthcare data imported from CSV files (Synthea format)"
     database: raw_db
     schema: csv
@@ -949,7 +949,7 @@ sources:
           - name: quantity
             description: "Quantity of supply used"
 
-  - name: ccda
+  - name: patient_analytics_ccda
     description: "CCDA schema containing healthcare data in C-CDA (Consolidated Clinical Document Architecture) format"
     database: raw_db
     schema: ccda
